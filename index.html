@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Obsoletos Reynasa · seguimiento</title>
+<style>
+:root{
+  color-scheme: light;
+  --page:#f9f9f9; --surface:#ffffff; --ink:#191919; --ink2:#666666; --grid:#e7e7e7; --axis:#c2c2c2;
+  --ring:rgba(11,11,11,0.10); --wash:rgba(37,125,224,0.08);
+  --s-pend:#257de0; --s-vend:#f47230; --s-otras:#00b894;
+  --ok:#0aac23; --warn:#fbb315; --crit:#dc3c3d; --ok-text:#006c10;
+  --accent:#1e2761;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme: dark;
+    --page:#0b0b0b; --surface:#191919; --ink:#efefef; --ink2:#9c9c9c; --grid:#303030; --axis:#474747;
+    --ring:rgba(255,255,255,0.10); --wash:rgba(51,140,237,0.12);
+    --s-pend:#338ced; --s-vend:#e76624; --s-otras:#00a888; --ok-text:#53c556; --accent:#9fb0ff;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:20px 24px 8px;max-width:1400px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650;letter-spacing:-.01em}
+.sub{color:var(--ink2);margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;color:var(--ink2);font-size:13px}
+.meta b{color:var(--ink);font-weight:600}
+nav{position:sticky;top:0;z-index:5;background:var(--page);border-bottom:1px solid var(--grid)}
+nav .in{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;gap:4px;overflow-x:auto}
+nav button{border:0;background:none;color:var(--ink2);font:inherit;font-weight:550;padding:12px 12px 10px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
+nav button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+main{max-width:1400px;margin:0 auto;padding:18px 24px 40px}
+section[hidden]{display:none}
+.card{background:var(--surface);border-radius:10px;box-shadow:0 0 0 1px var(--ring);padding:16px 18px;margin-bottom:16px}
+.card h2{font-size:15px;margin:0 0 2px;font-weight:650}
+.card .hint{color:var(--ink2);font-size:12.5px;margin:0 0 12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--surface);border-radius:10px;box-shadow:0 0 0 1px var(--ring);padding:14px 16px}
+.kpi .l{color:var(--ink2);font-size:12.5px;display:flex;align-items:center;gap:6px}
+.kpi .v{font-size:26px;font-weight:650;margin-top:4px;letter-spacing:-.01em}
+.kpi .s{color:var(--ink2);font-size:12.5px;margin-top:2px}
+.key{display:inline-block;width:10px;height:10px;border-radius:3px;flex:none}
+.row2{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
+@media (max-width:980px){.row2{grid-template-columns:1fr}}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:12px}
+.seg{display:inline-flex;border-radius:8px;box-shadow:0 0 0 1px var(--ring);overflow:hidden}
+.seg button{border:0;background:var(--surface);color:var(--ink2);font:inherit;padding:5px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+input[type=search],select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--axis);border-radius:8px;padding:6px 10px}
+input[type=search]{min-width:240px}
+label.chk{display:inline-flex;gap:6px;align-items:center;color:var(--ink2)}
+.btn{font:inherit;border:1px solid var(--axis);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}
+.btn:hover{background:var(--wash)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;color:var(--ink2);font-size:12.5px;margin:0 0 8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.chart{position:relative;width:100%}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{fill:var(--ink2);font-size:11px;font-variant-numeric:tabular-nums}
+.tip{position:absolute;pointer-events:none;background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--ring),0 6px 18px rgba(0,0,0,.12);border-radius:8px;padding:8px 10px;font-size:12.5px;white-space:nowrap;opacity:0;transition:opacity .08s;z-index:3}
+.tip b{font-weight:600}
+.tip .k{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
+.tablewrap{overflow:auto;max-width:100%}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;border-bottom:1px solid var(--grid);text-align:right;white-space:nowrap}
+th{font-size:12px;color:var(--ink2);font-weight:600;position:sticky;top:0;background:var(--surface);cursor:default}
+th.sort{cursor:pointer}
+th.sort:hover{color:var(--ink)}
+th .grp{display:block;font-weight:500;font-size:11px}
+td.t,th.t{text-align:left}
+tr.tot td{font-weight:650;border-top:1px solid var(--axis)}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover td{background:var(--wash)}
+td.muted{color:var(--ink2)}
+.det td{background:var(--page);text-align:left;white-space:normal}
+.det table{width:auto;margin:6px 0}
+.det th,.det td{background:transparent}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px 2px 8px;font-size:12px;font-weight:600;box-shadow:0 0 0 1px var(--ring)}
+.pill i{font-style:normal;display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;color:#fff;font-size:10px}
+.pill.hecho i{background:var(--ok)} .pill.marcha i{background:var(--warn);color:#0b0b0b} .pill.pend i{background:var(--crit)}
+.seguim{display:grid;gap:10px}
+.seguim .it{display:grid;grid-template-columns:150px 1fr;gap:6px 16px;padding:12px 0;border-bottom:1px solid var(--grid)}
+.seguim .it:last-child{border-bottom:0}
+.seguim .p{font-weight:600}
+.seguim .n{color:var(--ink2)}
+.seguim .q{color:var(--ink2);font-size:12.5px;margin-top:6px}
+.pager{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:10px;color:var(--ink2)}
+.metod dt{font-weight:600;margin-top:10px}
+.metod dd{margin:2px 0 0;color:var(--ink2)}
+.bar{height:6px;border-radius:3px;background:var(--grid);overflow:hidden;min-width:60px}
+.bar span{display:block;height:100%;background:var(--s-pend)}
+footer{max-width:1400px;margin:0 auto;padding:0 24px 30px;color:var(--ink2);font-size:12px}
+.err{color:var(--crit);font-weight:600}
+</style>
+</head>
+<body>
+<header>
+  <h1>Obsoletos Reynasa · qué se ha vendido y qué queda</h1>
+  <p class="sub">Perímetro de obsoletos congelado a 31.12.2025, cruzado con el stock y las ventas de Sage X3. Todo valorado a PMP de diciembre 2025.</p>
+  <div class="meta" id="meta">Cargando datos…</div>
+</header>
+<nav><div class="in" role="tablist">
+  <button role="tab" data-tab="resumen" aria-selected="true">Resumen</button>
+  <button role="tab" data-tab="familias" aria-selected="false">Por familia</button>
+  <button role="tab" data-tab="referencias" aria-selected="false">Por referencia</button>
+  <button role="tab" data-tab="plantas" aria-selected="false" id="tabPlantas" hidden>Por planta</button>
+  <button role="tab" data-tab="seguimiento" aria-selected="false">Seguimiento</button>
+  <button role="tab" data-tab="metodologia" aria-selected="false">Metodología</button>
+</div></nav>
+<main>
+<section id="resumen">
+  <div class="kpis" id="kpis"></div>
+  <div class="toolbar"><span style="color:var(--ink2)">Ver gráficos en</span>
+    <div class="seg" id="medida"><button data-m="eur" aria-pressed="true">Euros</button><button data-m="ud" aria-pressed="false">Unidades</button></div>
+  </div>
+  <div class="row2">
+    <div class="card"><h2 id="tEvol">Obsoleto pendiente en cada corte</h2><p class="hint">Cada punto es una foto del stock en Sage. A partir de ahora se añade un punto cada día.</p><div class="chart" id="chEvol"></div></div>
+    <div class="card"><h2>Destino del obsoleto de diciembre, por categoría</h2><p class="hint">Vendido + otras salidas + pendiente. Lo pendiente incluye las reentradas por compras.</p>
+      <div class="legend"><span><i class="key" style="background:var(--s-vend)"></i>Vendido</span><span><i class="key" style="background:var(--s-otras)"></i>Otras salidas</span><span><i class="key" style="background:var(--s-pend)"></i>Pendiente</span></div>
+      <div class="chart" id="chCat"></div></div>
+  </div>
+  <div class="card"><h2>Por categoría</h2><p class="hint">Unidades e importe de cada concepto, desde el 31.12.2025 hasta el último corte.</p><div class="tablewrap" id="tbCat"></div></div>
+  <div class="card"><h2>Situación de las referencias</h2><p class="hint">Cómo está cada referencia del perímetro en el último corte.</p><div class="tablewrap" id="tbSit"></div></div>
+  <div class="card"><h2>Dónde se concentra lo pendiente</h2><p class="hint">Referencias ordenadas por importe pendiente, de mayor a menor.</p><div class="tablewrap" id="tbConc"></div></div>
+</section>
+
+<section id="familias" hidden>
+  <div class="card"><h2>Por familia</h2><p class="hint">Pulsa una familia para ver sus referencias. Pulsa una cabecera para ordenar.</p>
+    <div class="toolbar"><input type="search" id="qFam" placeholder="Buscar familia"><select id="fCatFam"><option value="">Todas las categorías</option></select><button class="btn" id="csvFam">Descargar CSV</button></div>
+    <div class="tablewrap" id="tbFam" style="max-height:70vh"></div></div>
+</section>
+
+<section id="referencias" hidden>
+  <div class="card"><h2>Por referencia</h2><p class="hint">Pulsa una referencia para ver su evolución en cada corte. La descarga incluye todas las columnas de lo filtrado.</p>
+    <div class="toolbar">
+      <input type="search" id="qRef" placeholder="Buscar referencia">
+      <select id="fFam"><option value="">Todas las familias</option></select>
+      <select id="fCat"><option value="">Todas las categorías</option></select>
+      <select id="fSit"><option value="">Todas las situaciones</option></select>
+      <label class="chk"><input type="checkbox" id="fPend" checked> Solo con pendiente</label>
+      <button class="btn" id="csvRef">Descargar CSV</button>
+    </div>
+    <div id="resRef" class="hint"></div>
+    <div class="tablewrap" id="tbRef"></div>
+    <div class="pager" id="pager"></div></div>
+</section>
+
+<section id="plantas" hidden>
+  <div class="card"><h2>Stock de las referencias del perímetro por planta</h2><p class="hint">Todas las unidades en stock de las referencias obsoletas en cada planta, según el último ZCON13. El obsoleto se calcula por referencia sumando todas las plantas; aquí se ve dónde está físicamente ese stock.</p><div class="tablewrap" id="tbPl"></div></div>
+</section>
+
+<section id="seguimiento" hidden>
+  <div class="card"><h2 id="tSeg">Seguimiento</h2><p class="hint">Peticiones abiertas sobre la gestión de los obsoletos y su estado.</p><div class="seguim" id="seg"></div></div>
+</section>
+
+<section id="metodologia" hidden>
+  <div class="card metod"><h2>Cómo se calcula</h2>
+  <dl>
+    <dt>Perímetro</dt><dd>16.697 referencias con categoría, unidades obsoletas, umbral y PMP congelados a 31.12.2025 (techo de unidades de diciembre).</dd>
+    <dt>Stock</dt><dd>Sage X3, peticionario ZCON13 «Stock sin estado Q ni cascos», todas las plantas. Se suma por referencia normalizada (mayúsculas, sin guiones, puntos, barras ni espacios), agregando plantas y ubicaciones.</dd>
+    <dt>Ventas</dt><dd>Sage X3, peticionario ZDL25 «Ventas por referencia». Cantidad e importe netos por referencia (las devoluciones de cliente restan). Tramo 1: 01.01–31.07.2026. Tramo 2: desde el 01.08.2026 hasta el último corte.</dd>
+    <dt>Obsoleto en una fecha</dt><dd>MIN( MAX(stock de la fecha − umbral; 0) ; unidades obsoletas de diciembre ).</dd>
+    <dt>Salida de obsoleto por tramo</dt><dd>Dic → 31.07: obsoleto de diciembre − obsoleto a 31.07. 31.07 → último corte: obsoleto a 31.07 − obsoleto del corte. Si sale negativo es una reentrada: compras que vuelven a llenar la referencia.</dd>
+    <dt>Vendido</dt><dd>En cada tramo, MIN( salida de obsoleto del tramo ; ventas netas del tramo en Sage ). Lo que se vende de una referencia sale primero de las unidades obsoletas (las que están por encima del umbral).</dd>
+    <dt>Otras salidas</dt><dd>Salida de obsoleto que no queda cubierta por ventas en Sage: devoluciones a proveedor, bajas, regularizaciones de inventario o traspasos fuera del perímetro de ZCON13.</dd>
+    <dt>Valoración</dt><dd>Todo a PMP unitario del obsoleto de diciembre 2025, congelado. El importe de venta obtenido se calcula a precio medio de venta de la referencia en cada tramo.</dd>
+    <dt>Cautelas</dt><dd>Las ventas de enero cubren desde el 01.01. Una referencia con compras y ventas a la vez puede tener ventas que no salen del obsoleto; por eso la venta se limita a la salida real de stock. Las referencias que hayan entrado en obsolescencia después de diciembre no están en este perímetro.</dd>
+    <dt>Cortes</dt><dd id="mCortes"></dd>
+    <dt>Actualización</dt><dd>Cada noche se sacan de Sage X3 el ZCON13 y el ZDL25 (desde el 01.08.2026), se recalcula el tramo 2 y se publica el corte del día. Se conservan los cortes fijos y el cierre de cada mes. Si el stock sale incompleto o el obsoleto cambia más de un 15 % de un día a otro, no se publica y se revisa.</dd>
+  </dl></div>
+</section>
+</main>
+<footer id="foot"></footer>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const NBSP = " ";
+function fmtN(x, d){ if(x==null||isNaN(x)) return "–"; d=d||0; const neg=x<0; let s=Math.abs(x).toFixed(d); let [i,f]=s.split("."); i=i.replace(/\B(?=(\d{3})+(?!\d))/g,"."); return (neg?"−":"")+i+(f?","+f:""); }
+const fE = x => fmtN(x,0)+NBSP+"€";
+const fU = x => (x==null||isNaN(x))?"–":(Math.abs(x-Math.round(x))<1e-6?fmtN(x,0):fmtN(x,2));
+const fA = x => (x==null||isNaN(x))?"–":fmtN(x,0);
+const fP = x => (x==null||isNaN(x)||!isFinite(x))?"–":fmtN(x*100,1)+NBSP+"%";
+const fD = s => s? s.slice(8,10)+"."+s.slice(5,7)+"."+s.slice(0,4) : "–";
+const esc = s => String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let D, SERIE, SEG, ROWS=[], medida="eur";
+
+async function load(){
+  const v = "?v="+Date.now();
+  const [d, s, g] = await Promise.all([
+    fetch("datos/detalle.json"+v).then(r=>r.json()),
+    fetch("datos/serie.json"+v).then(r=>r.json()),
+    fetch("datos/seguimiento.json"+v).then(r=>r.json()).catch(()=>null)
+  ]);
+  D=d; SERIE=s; SEG=g;
+  const ix={}; D.campos.forEach((c,i)=>ix[c]=i);
+  const nC = D.cortes.length;
+  ROWS = D.filas.map(f=>{
+    const u=f[ix.u], pmp=f[ix.pmp];
+    const v1=f[ix.v1], o1=f[ix.o1], vs1=f[ix.vs1], iv1=f[ix.iv1], v2=f[ix.v2], o2=f[ix.o2], r2=f[ix.r2], vs2=f[ix.vs2], iv2=f[ix.iv2];
+    const obt = (vs1>0? v1*iv1/vs1:0) + (vs2>0? v2*iv2/vs2:0);
+    return {ref:f[ix.ref], fam:D.familias[f[ix.fam]], cat:D.categorias[f[ix.cat]], ci:f[ix.cat], pmp, umbral:f[ix.umbral], u,
+      dic:u[0], hoy:u[nC-1], v:v1+v2, o:o1+o2, re:r2, v1,o1,v2,o2, vs1,iv1,vs2,iv2, st:f[ix.st], ste:f[ix.ste], sit:f[ix.sit], obt, pl:f[ix.pl]||[]};
+  });
+  render();
+}
+
+function agg(rows){
+  const a={refs:0,dicU:0,dicE:0,vU:0,vE:0,oU:0,oE:0,rU:0,rE:0,hU:0,hE:0,obt:0,stU:0};
+  for(const r of rows){ a.refs++; a.dicU+=r.dic; a.dicE+=r.dic*r.pmp; a.vU+=r.v; a.vE+=r.v*r.pmp; a.oU+=r.o; a.oE+=r.o*r.pmp; a.rU+=r.re; a.rE+=r.re*r.pmp; a.hU+=r.hoy; a.hE+=r.hoy*r.pmp; a.obt+=r.obt; a.stU+=r.st; }
+  return a;
+}
+
+function render(){
+  const ult = D.ultimo, A = agg(ROWS);
+  $("#meta").innerHTML = `<span>Último corte: <b>${fD(ult)}</b></span><span>Fuente: ${esc(D.fuenteUltimo||"")}</span><span>Se actualiza cada noche desde Sage X3</span>`;
+  $("#foot").textContent = `Generado automáticamente el ${D.generado? fD(D.generado.slice(0,10))+" a las "+D.generado.slice(11,16):"–"}. Cifras a PMP unitario de diciembre 2025.`;
+  const liq = ROWS.filter(r=>r.hoy<=1e-9).length;
+  const kp = [
+    ["Obsoleto a 31.12.2025", fE(A.dicE), `${fA(A.dicU)} ud · ${fmtN(A.refs)} referencias`, null],
+    [`Pendiente a ${fD(ult)}`, fE(A.hE), `${fA(A.hU)} ud · queda el ${fP(A.hE/A.dicE)}`, "var(--s-pend)"],
+    ["Vendido desde diciembre", fE(A.vE), `${fA(A.vU)} ud · el ${fP(A.vE/A.dicE)} del obsoleto`, "var(--s-vend)"],
+    ["Otras salidas sin venta", fE(A.oE), `${fA(A.oU)} ud · devoluciones, bajas, regularizaciones`, "var(--s-otras)"],
+    ["Reentradas por compras", fE(A.rE), `${fA(A.rU)} ud que han vuelto a entrar`, null],
+    ["Importe de venta obtenido", fE(A.obt), `por el obsoleto vendido · ${fmtN(liq)} referencias liquidadas`, null],
+  ];
+  $("#kpis").innerHTML = kp.map(k=>`<div class="kpi"><div class="l">${k[3]?`<i class="key" style="background:${k[3]}"></i>`:""}${k[0]}</div><div class="v">${k[1]}</div><div class="s">${k[2]}</div></div>`).join("");
+  drawEvol(); drawCat(); tableCat(); tableSit(); tableConc();
+  initFam(); initRef(); initPl(); renderSeg();
+  $("#mCortes").innerHTML = SERIE.map(p=>`${fD(p.fecha)}: ${esc(p.fuente||"")}`).join("<br>");
+}
+
+/* ---------- gráficos ---------- */
+function niceScale(v){ if(v<=0) return {max:1,n:4}; const p=Math.pow(10,Math.floor(Math.log10(v))); for(const k of [0.1,0.2,0.25,0.5,1,2,2.5,5,10]){ const st=k*p, n=Math.ceil(v/st-1e-9); if(n<=5) return {max:n*st,n}; } return {max:10*p,n:1}; }
+function tickFmt(v){ return medida==="eur" ? (v>=1e6? fmtN(v/1e6,1)+" M€" : v>=1e3? fmtN(v/1e3,0)+" k€" : fmtN(v,0)+" €") : (v>=1e3? fmtN(v/1e3,0)+" k" : fmtN(v,0)); }
+function tipAt(box, tip, html, x, y){ tip.innerHTML=html; tip.style.opacity=1; const bw=box.clientWidth; const tw=tip.offsetWidth; let left=x+14; if(left+tw>bw) left=x-tw-14; tip.style.left=Math.max(0,left)+"px"; tip.style.top=Math.max(0,y-10)+"px"; }
+
+function drawEvol(){
+  const box=$("#chEvol"); const W=640,H=280,m={l:56,r:70,t:14,b:30};
+  $("#tEvol").textContent = medida==="eur" ? "Obsoleto pendiente en cada corte (€)" : "Obsoleto pendiente en cada corte (unidades)";
+  const pts=SERIE.map(p=>({t:new Date(p.fecha+"T12:00:00").getTime(), v: medida==="eur"?p.eur:p.ud, p}));
+  const t0=pts[0].t, t1=pts[pts.length-1].t; const span=Math.max(t1-t0,1);
+  const sc=niceScale(Math.max(...pts.map(p=>p.v))*1.02), ymax=sc.max;
+  const X=t=>m.l+(t-t0)/span*(W-m.l-m.r), Y=v=>H-m.b-(v/ymax)*(H-m.t-m.b);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Evolución del obsoleto pendiente">`;
+  for(let i=0;i<=sc.n;i++){ const v=ymax*i/sc.n, y=Y(v); s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y}" y2="${y}" stroke="${i?"var(--grid)":"var(--axis)"}" stroke-width="1"/><text x="${m.l-8}" y="${y+4}" text-anchor="end">${tickFmt(v)}</text>`; }
+  // meses
+  const d0=new Date(t0); let d=new Date(d0.getFullYear(), d0.getMonth()+1, 1);
+  const meses=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  let k=0; while(d.getTime()<=t1){ const x=X(d.getTime()); if(k%2===0) s+=`<text x="${x}" y="${H-m.b+18}" text-anchor="middle">${meses[d.getMonth()]}${d.getMonth()===0?" "+String(d.getFullYear()).slice(2):""}</text>`; s+=`<line x1="${x}" x2="${x}" y1="${H-m.b}" y2="${H-m.b+4}" stroke="var(--axis)"/>`; d=new Date(d.getFullYear(), d.getMonth()+1, 1); k++; }
+  const path=pts.map((p,i)=>(i?"L":"M")+X(p.t).toFixed(1)+" "+Y(p.v).toFixed(1)).join(" ");
+  const area=path+` L${X(t1).toFixed(1)} ${Y(0)} L${X(t0).toFixed(1)} ${Y(0)} Z`;
+  s+=`<path d="${area}" fill="var(--s-pend)" opacity="0.10"/><path d="${path}" fill="none" stroke="var(--s-pend)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+  s+=`<line id="cross" x1="0" x2="0" y1="${m.t}" y2="${H-m.b}" stroke="var(--axis)" stroke-width="1" opacity="0"/>`;
+  pts.forEach((p,i)=>{ s+=`<circle cx="${X(p.t)}" cy="${Y(p.v)}" r="4.5" fill="var(--s-pend)" stroke="var(--surface)" stroke-width="2"/>`; });
+  const first=pts[0], last=pts[pts.length-1];
+  s+=`<text x="${X(last.t)+8}" y="${Y(last.v)+4}" style="fill:var(--ink);font-weight:600">${medida==="eur"?fE(last.v):fA(last.v)+" ud"}</text>`;
+  s+=`<text x="${X(first.t)+8}" y="${Y(first.v)-8}" style="fill:var(--ink)">${medida==="eur"?fE(first.v):fA(first.v)+" ud"}</text>`;
+  s+=`<rect x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent" id="hit"/></svg><div class="tip"></div>`;
+  box.innerHTML=s;
+  const svg=box.querySelector("svg"), tip=box.querySelector(".tip"), cross=svg.querySelector("#cross");
+  svg.querySelector("#hit").addEventListener("mousemove", e=>{
+    const rc=svg.getBoundingClientRect(); const sx=(e.clientX-rc.left)/rc.width*W;
+    let best=pts[0]; for(const p of pts) if(Math.abs(X(p.t)-sx)<Math.abs(X(best.t)-sx)) best=p;
+    cross.setAttribute("x1",X(best.t)); cross.setAttribute("x2",X(best.t)); cross.setAttribute("opacity",1);
+    const P=best.p; const pct = P.eur/SERIE[0].eur;
+    tipAt(box, tip, `<b>${fD(P.fecha)}</b><br><i class="k" style="background:var(--s-pend)"></i>Pendiente: <b>${fE(P.eur)}</b> · ${fA(P.ud)} ud<br>Queda el ${fP(pct)} del obsoleto de diciembre${P.vendidoEur!=null&&P.fecha!==SERIE[0].fecha?`<br>Vendido acumulado: ${fE(P.vendidoEur)} · Otras salidas: ${fE(P.otrasEur)}`:""}<br><span style="color:var(--ink2)">${esc(P.fuente||"")}</span>`, X(best.t)/W*rc.width, Y(best.v)/H*rc.height);
+  });
+  svg.querySelector("#hit").addEventListener("mouseleave", ()=>{ tip.style.opacity=0; cross.setAttribute("opacity",0); });
+}
+
+function drawCat(){
+  const box=$("#chCat"); const W=560, rowH=46, m={l:150,r:90,t:6,b:24};
+  const groups=D.categorias.map((c,i)=>({name:c, a:agg(ROWS.filter(r=>r.ci===i))})); groups.push({name:"TOTAL", a:agg(ROWS)});
+  const val=(a,k)=> medida==="eur" ? a[k+"E"] : a[k+"U"];
+  const H=m.t+m.b+rowH*groups.length;
+  const sc=niceScale(Math.max(...groups.map(g=>val(g.a,"v")+val(g.a,"o")+val(g.a,"h")))), max=sc.max;
+  const X=v=>m.l+v/max*(W-m.l-m.r);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Destino del obsoleto por categoría">`;
+  for(let i=0;i<=sc.n;i++){ const v=max*i/sc.n, x=X(v); s+=`<line x1="${x}" x2="${x}" y1="${m.t}" y2="${H-m.b}" stroke="${i?"var(--grid)":"var(--axis)"}"/><text x="${x}" y="${H-m.b+16}" text-anchor="middle">${tickFmt(v)}</text>`; }
+  const segs=[["v","var(--s-vend)","Vendido"],["o","var(--s-otras)","Otras salidas"],["h","var(--s-pend)","Pendiente"]];
+  groups.forEach((g,gi)=>{
+    const y=m.t+gi*rowH+(rowH-22)/2; let acc=0;
+    s+=`<text x="${m.l-10}" y="${y+15}" text-anchor="end" style="fill:var(--ink);${g.name==="TOTAL"?"font-weight:650":""}">${g.name==="TOTAL"?"Total":g.name.charAt(0)+g.name.slice(1).toLowerCase()}</text>`;
+    const vis=segs.filter(sg=>val(g.a,sg[0])>0);
+    vis.forEach((sg,si)=>{ const v=val(g.a,sg[0]); const x0=X(acc), x1=X(acc+v); acc+=v; const gap= si<vis.length-1?2:0; const w=Math.max(0,x1-x0-gap); const last=si===vis.length-1;
+      const rx= last? 4:0;
+      s+= last ? `<path d="M${x0} ${y} H${x0+w-4} Q${x0+w} ${y} ${x0+w} ${y+4} V${y+18} Q${x0+w} ${y+22} ${x0+w-4} ${y+22} H${x0} Z" fill="${sg[1]}" data-g="${gi}" data-s="${sg[0]}" class="seg"/>` : `<rect x="${x0}" y="${y}" width="${w}" height="22" fill="${sg[1]}" data-g="${gi}" data-s="${sg[0]}" class="seg"/>`;
+    });
+    const tot=val(g.a,"v")+val(g.a,"o")+val(g.a,"h");
+    s+=`<text x="${X(tot)+8}" y="${y+15}" style="fill:var(--ink)">${medida==="eur"?fE(val(g.a,"h")):fA(val(g.a,"h"))+" ud"} pend.</text>`;
+  });
+  s+=`</svg><div class="tip"></div>`; box.innerHTML=s;
+  const tip=box.querySelector(".tip"), svg=box.querySelector("svg");
+  svg.querySelectorAll(".seg").forEach(el=>{
+    el.addEventListener("mousemove", e=>{ const g=groups[+el.dataset.g], k=el.dataset.s, sg=segs.find(x=>x[0]===k); const rc=box.getBoundingClientRect();
+      const share=g.a[k+"E"]/g.a.dicE;
+      tipAt(box, tip, `<b>${g.name==="TOTAL"?"Total":esc(g.name)}</b><br><i class="k" style="background:${sg[1]}"></i>${sg[2]}: <b>${fE(g.a[k+"E"])}</b> · ${fA(g.a[k+"U"])} ud<br>${fP(share)} del obsoleto de diciembre`, e.clientX-rc.left, e.clientY-rc.top); });
+    el.addEventListener("mouseleave", ()=>tip.style.opacity=0);
+  });
+}
+
+/* ---------- tablas ---------- */
+const COLS = [["dic","Obsoleto 31.12.25"],["v","Vendido"],["o","Otras salidas"],["r","Reentradas"],["h","Pendiente"]];
+function headCols(){ return COLS.map(c=>`<th colspan="2" style="text-align:center">${c[1]}</th>`).join("")+`<th rowspan="2">% queda</th>`; }
+function sub(){ return COLS.map(()=>`<th>ud</th><th>€</th>`).join(""); }
+function cells(a){ return [["dicU","dicE"],["vU","vE"],["oU","oE"],["rU","rE"],["hU","hE"]].map(([u,e])=>`<td>${fA(a[u])}</td><td>${fE(a[e])}</td>`).join("")+`<td>${fP(a.hE/a.dicE)}</td>`; }
+
+function tableCat(){
+  let h=`<table><thead><tr><th class="t" rowspan="2">Categoría</th><th rowspan="2">Refs</th>${headCols()}</tr><tr>${sub()}</tr></thead><tbody>`;
+  D.categorias.forEach((c,i)=>{ const a=agg(ROWS.filter(r=>r.ci===i)); h+=`<tr><td class="t">${esc(c)}</td><td>${fmtN(a.refs)}</td>${cells(a)}</tr>`; });
+  const A=agg(ROWS); h+=`<tr class="tot"><td class="t">TOTAL</td><td>${fmtN(A.refs)}</td>${cells(A)}</tr></tbody></table>`;
+  $("#tbCat").innerHTML=h;
+}
+function tableSit(){
+  let h=`<table><thead><tr><th class="t" rowspan="2">Situación</th><th rowspan="2">Refs</th>${headCols()}</tr><tr>${sub()}</tr></thead><tbody>`;
+  D.situaciones.forEach((s,i)=>{ const a=agg(ROWS.filter(r=>r.sit===i)); h+=`<tr class="click" data-sit="${i}"><td class="t">${esc(s)}</td><td>${fmtN(a.refs)}</td>${cells(a)}</tr>`; });
+  h+=`</tbody></table>`; $("#tbSit").innerHTML=h;
+  $("#tbSit").querySelectorAll("tr.click").forEach(tr=>tr.addEventListener("click",()=>{ $("#fSit").value=tr.dataset.sit; $("#fPend").checked=false; $("#fFam").value=""; $("#fCat").value=""; $("#qRef").value=""; refPage=0; drawRef(); showTab("referencias"); }));
+}
+function tableConc(){
+  const pend=ROWS.filter(r=>r.hoy>1e-9).sort((a,b)=>b.hoy*b.pmp-a.hoy*a.pmp); const tot=pend.reduce((s,r)=>s+r.hoy*r.pmp,0);
+  const igual=agg(ROWS.filter(r=>r.sit===0));
+  let h=`<table><thead><tr><th class="t">Tramo</th><th>Refs</th><th>Ud pendientes</th><th>€ pendiente</th><th>% de lo pendiente</th><th class="t"></th></tr></thead><tbody>`;
+  [[0,50],[50,200],[200,1000],[1000,pend.length]].forEach(([a,b])=>{ if(a>=pend.length) return; const sl=pend.slice(a,b); const e=sl.reduce((s,r)=>s+r.hoy*r.pmp,0), u=sl.reduce((s,r)=>s+r.hoy,0);
+    h+=`<tr><td class="t">Referencias ${fmtN(a+1)}–${fmtN(Math.min(b,pend.length))}</td><td>${fmtN(sl.length)}</td><td>${fA(u)}</td><td>${fE(e)}</td><td>${fP(e/tot)}</td><td class="t"><div class="bar"><span style="width:${(e/tot*100).toFixed(1)}%"></span></div></td></tr>`; });
+  h+=`<tr class="tot"><td class="t">Total con pendiente</td><td>${fmtN(pend.length)}</td><td>${fA(pend.reduce((s,r)=>s+r.hoy,0))}</td><td>${fE(tot)}</td><td>100,0${NBSP}%</td><td></td></tr>`;
+  h+=`<tr><td class="t muted" colspan="6">De lo pendiente, ${fmtN(igual.refs)} referencias (${fE(igual.hE)}) siguen igual que en diciembre: no han tenido ninguna salida de obsoleto.</td></tr></tbody></table>`;
+  $("#tbConc").innerHTML=h;
+}
+
+/* ---------- por familia ---------- */
+let famSort={k:"hE",d:-1};
+function initFam(){
+  const sel=$("#fCatFam"); if(sel.options.length===1) D.categorias.forEach((c,i)=>sel.add(new Option(c,i)));
+  $("#qFam").oninput=drawFam; sel.onchange=drawFam; $("#csvFam").onclick=csvFam; drawFam();
+}
+function famData(){
+  const q=$("#qFam").value.trim().toUpperCase(), c=$("#fCatFam").value;
+  const by=new Map(); for(const r of ROWS){ if(c!==""&&r.ci!==+c) continue; if(q&&!r.fam.toUpperCase().includes(q)) continue; if(!by.has(r.fam)) by.set(r.fam,[]); by.get(r.fam).push(r); }
+  const out=[...by.entries()].map(([f,rs])=>Object.assign({fam:f},agg(rs)));
+  out.forEach(o=>o.pq=o.dicE? o.hE/o.dicE:0);
+  out.sort((a,b)=> famSort.k==="fam"? famSort.d*a.fam.localeCompare(b.fam) : famSort.d*((a[famSort.k]||0)-(b[famSort.k]||0)));
+  return out;
+}
+function drawFam(){
+  const data=famData(); const keys=[["dicU","dicE"],["vU","vE"],["oU","oE"],["rU","rE"],["hU","hE"]];
+  const arrow=k=>famSort.k===k?(famSort.d<0?" ▾":" ▴"):"";
+  let h=`<table><thead><tr><th class="t sort" rowspan="2" data-k="fam">Familia${arrow("fam")}</th><th class="sort" rowspan="2" data-k="refs">Refs${arrow("refs")}</th>${COLS.map(c=>`<th colspan="2" style="text-align:center">${c[1]}</th>`).join("")}<th class="sort" rowspan="2" data-k="pq">% queda${arrow("pq")}</th></tr><tr>${keys.map(([u,e])=>`<th class="sort" data-k="${u}">ud${arrow(u)}</th><th class="sort" data-k="${e}">€${arrow(e)}</th>`).join("")}</tr></thead><tbody>`;
+  for(const o of data) h+=`<tr class="click" data-f="${esc(o.fam)}"><td class="t">${esc(o.fam)}</td><td>${fmtN(o.refs)}</td>${cells(o)}</tr>`;
+  const A=agg(ROWS.filter(r=>data.some(o=>o.fam===r.fam)&&($("#fCatFam").value===""||r.ci===+$("#fCatFam").value)));
+  h+=`<tr class="tot"><td class="t">TOTAL (${fmtN(data.length)} familias)</td><td>${fmtN(A.refs)}</td>${cells(A)}</tr></tbody></table>`;
+  $("#tbFam").innerHTML=h;
+  $("#tbFam").querySelectorAll("th.sort").forEach(th=>th.onclick=()=>{ const k=th.dataset.k; famSort = famSort.k===k? {k,d:-famSort.d} : {k,d:k==="fam"?1:-1}; drawFam(); });
+  $("#tbFam").querySelectorAll("tr.click").forEach(tr=>tr.onclick=()=>{ $("#fFam").value=tr.dataset.f; $("#fCat").value=$("#fCatFam").value; $("#fSit").value=""; $("#qRef").value=""; refPage=0; drawRef(); showTab("referencias"); });
+}
+function csvFam(){
+  const data=famData(); const head=["Familia","Refs","Ud obsoleto 31.12.25","€ obsoleto 31.12.25","Ud vendidas","€ vendido","Ud otras salidas","€ otras salidas","Ud reentradas","€ reentradas",`Ud pendiente ${fD(D.ultimo)}`,`€ pendiente ${fD(D.ultimo)}`,"% queda"];
+  const rows=data.map(o=>[o.fam,o.refs,o.dicU,o.dicE,o.vU,o.vE,o.oU,o.oE,o.rU,o.rE,o.hU,o.hE,o.pq]);
+  download(`Obsoletos Reynasa por familia ${fD(D.ultimo)}.csv`, head, rows);
+}
+
+/* ---------- por referencia ---------- */
+let refSort={k:"he",d:-1}, refPage=0, openRef=null; const PAGE=50;
+function initRef(){
+  const ff=$("#fFam"); if(ff.options.length===1) D.familias.forEach(f=>ff.add(new Option(f,f)));
+  const fc=$("#fCat"); if(fc.options.length===1) D.categorias.forEach((c,i)=>fc.add(new Option(c,i)));
+  const fs=$("#fSit"); if(fs.options.length===1) D.situaciones.forEach((s,i)=>fs.add(new Option(s,i)));
+  ["#qRef","#fFam","#fCat","#fSit","#fPend"].forEach(id=>{ $(id).oninput=()=>{refPage=0;drawRef();}; $(id).onchange=()=>{refPage=0;drawRef();}; });
+  $("#csvRef").onclick=csvRef; drawRef();
+}
+function refData(){
+  const q=$("#qRef").value.trim().toUpperCase().replace(/[-./\\\s]/g,""), f=$("#fFam").value, c=$("#fCat").value, s=$("#fSit").value, p=$("#fPend").checked;
+  const out=ROWS.filter(r=>(!q||r.ref.toUpperCase().replace(/[-./\\\s]/g,"").includes(q))&&(!f||r.fam===f)&&(c===""||r.ci===+c)&&(s===""||r.sit===+s)&&(!p||r.hoy>1e-9));
+  const val=(r,k)=>({ref:r.ref,fam:r.fam,pmp:r.pmp,du:r.dic,de:r.dic*r.pmp,vu:r.v,ve:r.v*r.pmp,ou:r.o,oe:r.o*r.pmp,ru:r.re,hu:r.hoy,he:r.hoy*r.pmp,st:r.st,iv:r.iv1+r.iv2}[k]);
+  out.sort((a,b)=>{ const x=val(a,refSort.k), y=val(b,refSort.k); return typeof x==="string"? refSort.d*x.localeCompare(y) : refSort.d*((x||0)-(y||0)); });
+  return out;
+}
+function drawRef(){
+  const data=refData(); const A=agg(data); const pages=Math.max(1,Math.ceil(data.length/PAGE)); if(refPage>=pages) refPage=pages-1;
+  $("#resRef").innerHTML=`${fmtN(data.length)} referencias · obsoleto dic ${fE(A.dicE)} (${fA(A.dicU)} ud) · vendido ${fE(A.vE)} (${fA(A.vU)} ud) · pendiente <b>${fE(A.hE)}</b> (${fA(A.hU)} ud)`;
+  const arrow=k=>refSort.k===k?(refSort.d<0?" ▾":" ▴"):"";
+  const th=(k,t,cls)=>`<th class="sort ${cls||""}" data-k="${k}">${t}${arrow(k)}</th>`;
+  let h=`<table><thead><tr>${th("ref","Referencia","t")}${th("fam","Familia","t")}<th class="t">Categoría</th><th class="t">Situación</th>${th("pmp","PMP dic")}${th("du","Ud obs. dic")}${th("de","€ obs. dic")}${th("vu","Ud vendidas")}${th("ve","€ vendido")}${th("ou","Ud otras sal.")}${th("oe","€ otras sal.")}${th("ru","Ud reentr.")}${th("hu","Ud pendientes")}${th("he","€ pendiente")}${th("st","Ud stock "+fD(D.ultimo).slice(0,5))}${th("iv","Venta Sage €")}</tr></thead><tbody>`;
+  for(const r of data.slice(refPage*PAGE,(refPage+1)*PAGE)){
+    h+=`<tr class="click" data-r="${esc(r.ref)}"><td class="t"><b>${esc(r.ref)}</b></td><td class="t">${esc(r.fam)}</td><td class="t muted">${esc(r.cat)}</td><td class="t">${esc(D.situaciones[r.sit])}</td><td>${fmtN(r.pmp,2)}</td><td>${fU(r.dic)}</td><td>${fE(r.dic*r.pmp)}</td><td>${fU(r.v)}</td><td>${fE(r.v*r.pmp)}</td><td>${fU(r.o)}</td><td>${fE(r.o*r.pmp)}</td><td>${fU(r.re)}</td><td><b>${fU(r.hoy)}</b></td><td><b>${fE(r.hoy*r.pmp)}</b></td><td>${fU(r.st)}</td><td>${fE(r.iv1+r.iv2)}</td></tr>`;
+    if(openRef===r.ref) h+=detRow(r);
+  }
+  h+=`</tbody></table>`; $("#tbRef").innerHTML=h;
+  $("#tbRef").querySelectorAll("th.sort").forEach(t=>t.onclick=()=>{ const k=t.dataset.k; refSort = refSort.k===k? {k,d:-refSort.d} : {k,d:(k==="ref"||k==="fam")?1:-1}; drawRef(); });
+  $("#tbRef").querySelectorAll("tr.click").forEach(tr=>tr.onclick=()=>{ openRef = openRef===tr.dataset.r? null : tr.dataset.r; drawRef(); });
+  $("#pager").innerHTML = pages>1? `<button class="btn" id="pPrev" ${refPage?"":"disabled"}>Anterior</button><span>Página ${refPage+1} de ${fmtN(pages)}</span><button class="btn" id="pNext" ${refPage<pages-1?"":"disabled"}>Siguiente</button>` : "";
+  if(pages>1){ $("#pPrev").onclick=()=>{refPage--;drawRef();}; $("#pNext").onclick=()=>{refPage++;drawRef();}; }
+}
+function detRow(r){
+  let t=`<table><thead><tr><th class="t">Corte</th>${D.cortes.map(c=>`<th>${fD(c)}</th>`).join("")}</tr></thead><tbody>`;
+  t+=`<tr><td class="t">Ud obsoletas</td>${r.u.map(x=>`<td>${fU(x)}</td>`).join("")}</tr><tr><td class="t">€ obsoleto (PMP dic)</td>${r.u.map(x=>`<td>${fE(x*r.pmp)}</td>`).join("")}</tr></tbody></table>`;
+  let t2=`<table><thead><tr><th class="t">Tramo</th><th>Ud vendidas Sage</th><th>Venta Sage €</th><th>Ud obsoleto vendidas</th><th>Ud otras salidas</th><th>Ud reentradas</th></tr></thead><tbody><tr><td class="t">Dic → 31.07.2026</td><td>${fU(r.vs1)}</td><td>${fE(r.iv1)}</td><td>${fU(r.v1)}</td><td>${fU(r.o1)}</td><td>–</td></tr><tr><td class="t">01.08 → ${fD(D.ultimo)}</td><td>${fU(r.vs2)}</td><td>${fE(r.iv2)}</td><td>${fU(r.v2)}</td><td>${fU(r.o2)}</td><td>${fU(r.re)}</td></tr></tbody></table>`;
+  const pl = r.pl.length? `<div style="margin-top:6px">Stock por planta (todas las unidades): ${r.pl.map(([p,q])=>`${esc(D.plantas[p])} ${fU(q)} ud`).join(" · ")}</div>` : "";
+  return `<tr class="det"><td colspan="16">Umbral no obsoleto: ${fU(r.umbral)} ud · PMP obsoleto dic: ${fmtN(r.pmp,4)}${NBSP}€ · Stock total ${fD(D.ultimo)}: ${fU(r.st)} ud (${fE(r.ste)} a PMP actual)${t}${t2}${pl}</td></tr>`;
+}
+function csvRef(){
+  const data=refData();
+  const head=["Referencia","Familia","Categoría (dic-25)","Situación","PMP unitario obsoleto (€)","Umbral no obsoleto (ud)", ...D.cortes.flatMap(c=>[`Ud obsoleto ${fD(c)}`,`€ obsoleto ${fD(c)}`]),
+    "Ud vendidas Sage ene-jul","Venta Sage ene-jul €","Ud obsoleto vendidas dic-31.07","Ud obsoleto otras salidas dic-31.07",`Ud vendidas Sage 01.08-${fD(D.ultimo)}`,`Venta Sage 01.08-${fD(D.ultimo)} €`,`Ud obsoleto vendidas 31.07-${fD(D.ultimo)}`,`Ud obsoleto otras salidas 31.07-${fD(D.ultimo)}`,`Ud reentrada 31.07-${fD(D.ultimo)}`,
+    "€ obsoleto vendido (total)","€ obsoleto otras salidas (total)",`Ud stock ${fD(D.ultimo)}`,`€ stock ${fD(D.ultimo)} (PMP actual)`];
+  const rows=data.map(r=>[r.ref,r.fam,r.cat,D.situaciones[r.sit],r.pmp,r.umbral,...r.u.flatMap(x=>[x,x*r.pmp]),r.vs1,r.iv1,r.v1,r.o1,r.vs2,r.iv2,r.v2,r.o2,r.re,r.v*r.pmp,r.o*r.pmp,r.st,r.ste]);
+  download(`Obsoletos Reynasa por referencia ${fD(D.ultimo)}.csv`, head, rows);
+}
+
+/* ---------- por planta ---------- */
+function initPl(){
+  if(!D.plantas||!D.plantas.length){ $("#tabPlantas").hidden=true; return; }
+  $("#tabPlantas").hidden=false;
+  const by=D.plantas.map(p=>({p,refs:0,ud:0,refsPend:0}));
+  for(const r of ROWS) for(const [i,q] of r.pl){ by[i].refs++; by[i].ud+=q; if(r.hoy>1e-9) by[i].refsPend++; }
+  by.sort((a,b)=>b.ud-a.ud);
+  let h=`<table><thead><tr><th class="t">Planta</th><th>Refs del perímetro con stock</th><th>De ellas, con obsoleto pendiente</th><th>Ud en stock (todas)</th></tr></thead><tbody>`;
+  for(const o of by) h+=`<tr><td class="t">${esc(o.p)}</td><td>${fmtN(o.refs)}</td><td>${fmtN(o.refsPend)}</td><td>${fA(o.ud)}</td></tr>`;
+  $("#tbPl").innerHTML=h+`</tbody></table>`;
+}
+
+/* ---------- seguimiento ---------- */
+function renderSeg(){
+  if(!SEG){ $("#seg").innerHTML=`<p class="hint">Sin datos de seguimiento.</p>`; return; }
+  $("#tSeg").textContent=SEG.titulo||"Seguimiento";
+  const pill=e=> e==="hecho"?`<span class="pill hecho"><i>✓</i>Hecho</span>` : e==="en marcha"?`<span class="pill marcha"><i>…</i>En marcha</span>` : `<span class="pill pend"><i>!</i>Pendiente</span>`;
+  $("#seg").innerHTML=SEG.items.map(it=>`<div class="it"><div>${pill(it.estado)}</div><div><div class="p">${esc(it.peticion)}</div><div class="n">${esc(it.nota||"")}</div><div class="q">Lo pide: ${esc(it.quien)}</div></div></div>`).join("");
+}
+
+/* ---------- utilidades ---------- */
+function download(name, head, rows){
+  const cell=v=> typeof v==="number" ? String(Math.round(v*10000)/10000).replace(".",",") : `"${String(v??"").replace(/"/g,'""')}"`;
+  const txt="﻿"+[head.map(cell).join(";"),...rows.map(r=>r.map(cell).join(";"))].join("\r\n");
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([txt],{type:"text/csv;charset=utf-8"})); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
+}
+function showTab(t){ document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected", b.dataset.tab===t)); document.querySelectorAll("main section").forEach(s=>s.hidden = s.id!==t); history.replaceState(null,"","#"+t); window.scrollTo({top:0}); }
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+document.querySelectorAll("#medida button").forEach(b=>b.onclick=()=>{ medida=b.dataset.m; document.querySelectorAll("#medida button").forEach(x=>x.setAttribute("aria-pressed", x===b)); drawEvol(); drawCat(); });
+window.addEventListener("resize", ()=>{});
+load().then(()=>{ const h=location.hash.slice(1); if(h&&document.getElementById(h)) showTab(h); }).catch(e=>{ $("#meta").innerHTML=`<span class="err">No se han podido cargar los datos (${esc(e.message)}).</span>`; });
+</script>
+</body>
+</html>
