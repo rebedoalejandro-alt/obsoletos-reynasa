@@ -1,0 +1,50 @@
+[
+ {
+  "fecha": "2025-12-31",
+  "ud": 310917.74,
+  "eur": 1347197.79,
+  "vendidoUd": 0,
+  "vendidoEur": 0,
+  "otrasUd": 0,
+  "otrasEur": 0,
+  "reentUd": 0,
+  "reentEur": 0,
+  "fuente": "Perímetro de obsoletos congelado a 31.12.2025"
+ },
+ {
+  "fecha": "2026-07-20",
+  "ud": 267385.34,
+  "eur": 1006458.73,
+  "fuente": "Inventario a 20.07.2026"
+ },
+ {
+  "fecha": "2026-07-31",
+  "ud": 265933.19,
+  "eur": 994608.22,
+  "vendidoUd": 24314.55,
+  "vendidoEur": 241568.85,
+  "otrasUd": 20670,
+  "otrasEur": 111020.72,
+  "reentUd": 0,
+  "reentEur": 0,
+  "fuente": "Sage X3 · ZCON13 a 31.07.2026 y ZDL25 01.01–31.07.2026"
+ },
+ {
+  "fecha": "2026-10-31",
+  "ud": 256001.59,
+  "eur": 899555.18,
+  "fuente": "Sage X3 · stock a 31.10.2026"
+ },
+ {
+  "fecha": "2026-11-10",
+  "ud": 256074.59,
+  "eur": 902720.67,
+  "vendidoUd": 30884.55,
+  "vendidoEur": 318465.22,
+  "otrasUd": 26769.6,
+  "otrasEur": 135495.8,
+  "reentUd": 2811,
+  "reentEur": 9483.9,
+  "fuente": "Sage X3 · ZCON13 del 10.11.2026 (09:57) y ZDL25 del 01.08 al 10.11.2026"
+ }
+]

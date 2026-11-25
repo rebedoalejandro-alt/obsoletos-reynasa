@@ -1,0 +1,53 @@
+{
+ "titulo": "Qué pide Antonio y en qué punto está",
+ "items": [
+  {
+   "peticion": "Reunión para revisar a fondo la gestión de los obsoletos y planificar su salida de forma eficiente",
+   "quien": "Antonio",
+   "estado": "pendiente",
+   "nota": "Pendiente de agendar. Rubén se apunta y pide que se explique cómo se calcula hoy el obsoleto y quién tiene que verlo."
+  },
+  {
+   "peticion": "Una solución que se actualice sola, bajo demanda, desarrollada con Claude",
+   "quien": "Antonio",
+   "estado": "en marcha",
+   "nota": "Este panel. Se recalcula cada noche desde Sage X3 (stock ZCON13 y ventas ZDL25) con el mismo criterio del Excel de evolución, sin tocar Sage."
+  },
+  {
+   "peticion": "Ver las unidades y el importe de cada referencia, familia y categoría",
+   "quien": "Diego",
+   "estado": "hecho",
+   "nota": "Pestañas Resumen, Por familia y Por referencia, con unidades y euros en cada columna y descarga en CSV."
+  },
+  {
+   "peticion": "Desglose por planta",
+   "quien": "Rubén",
+   "estado": "en marcha",
+   "nota": "Sale del propio ZCON13 (18 plantas). Aparece en el panel con la primera carga diaria desde Sage."
+  },
+  {
+   "peticion": "Plan de salida del obsoleto pendiente",
+   "quien": "Antonio",
+   "estado": "pendiente",
+   "nota": "Para trabajarlo en la reunión. El panel ya ordena lo pendiente por importe y separa las referencias que siguen igual que en diciembre."
+  },
+  {
+   "peticion": "Quién tiene que ver el panel",
+   "quien": "Rubén",
+   "estado": "pendiente",
+   "nota": "Por definir en la reunión."
+  },
+  {
+   "peticion": "Comprobar cómo van las cifras a 31.10.2026 de cara a final de año",
+   "quien": "Alicia",
+   "estado": "hecho",
+   "nota": "Extraído el stock a 31.10.2026: 256.002 unidades obsoletas (899.555 € a PMP de diciembre)."
+  },
+  {
+   "peticion": "Compartir el corte a 31.10.2026 con el equipo externo para estar alineados a final de año",
+   "quien": "Alicia",
+   "estado": "hecho",
+   "nota": "Enviado por David con el fichero del análisis."
+  }
+ ]
+}
