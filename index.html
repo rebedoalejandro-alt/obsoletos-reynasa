@@ -441,7 +441,7 @@ function download(name, head, rows){
 function showTab(t){ document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected", b.dataset.tab===t)); document.querySelectorAll("main section").forEach(s=>s.hidden = s.id!==t); history.replaceState(null,"","#"+t); window.scrollTo({top:0}); }
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 document.querySelectorAll("#medida button").forEach(b=>b.onclick=()=>{ medida=b.dataset.m; document.querySelectorAll("#medida button").forEach(x=>x.setAttribute("aria-pressed", x===b)); drawEvol(); drawCat(); });
-window.addEventListener("resize", ()=>{});
+window.addEventListener("hashchange", ()=>{ const h=location.hash.slice(1); if(h&&document.getElementById(h)&&D) showTab(h); });
 load().then(()=>{ const h=location.hash.slice(1); if(h&&document.getElementById(h)) showTab(h); }).catch(e=>{ $("#meta").innerHTML=`<span class="err">No se han podido cargar los datos (${esc(e.message)}).</span>`; });
 </script>
 </body>

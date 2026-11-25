@@ -313,6 +313,18 @@ def guardar(carpeta, detalle, serie):
         json.dump(serie, f, ensure_ascii=False, indent=1)
 
 
+def _mapa(texto, opcionales):
+    """Convierte "ref=Articulo,ud=Stock" en el mapa de columnas que esperan los lectores."""
+    if not texto.strip():
+        return None
+    mapa = {}
+    for par in texto.split(","):
+        k, _, v = par.partition("=")
+        k = opcionales.get(k.strip(), k.strip())
+        mapa[k] = [_sin_tildes(v)]
+    return mapa
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--stock", required=True)
@@ -320,14 +332,16 @@ def main():
     ap.add_argument("--fecha", required=True, help="Fecha de corte AAAA-MM-DD (cierre del dia)")
     ap.add_argument("--datos", default="datos")
     ap.add_argument("--simular", action="store_true", help="Calcula y muestra el resultado sin escribir")
+    ap.add_argument("--cols-stock", default="", help='Cabeceras exactas de ZCON13 si la deteccion falla, p. ej. "ref=Articulo,ud=Stock,eur=Valor,planta=Planta"')
+    ap.add_argument("--cols-ventas", default="", help='Cabeceras exactas de ZDL25 si la deteccion falla, p. ej. "ref=Articulo,ud=Cantidad,imp=Importe"')
     a = ap.parse_args()
 
     dt.date.fromisoformat(a.fecha)
     detalle, serie = cargar(a.datos)
     if a.fecha < CORTE_TRAMO:
         raise SystemExit("La fecha debe ser posterior al 31.07.2026")
-    stock, stock_eur, plantas, c_stock = leer_stock(a.stock)
-    ventas, importes, c_ventas = leer_ventas(a.ventas)
+    stock, stock_eur, plantas, c_stock = leer_stock(a.stock, _mapa(a.cols_stock, {"eur": "eur?", "planta": "planta?"}))
+    ventas, importes, c_ventas = leer_ventas(a.ventas, _mapa(a.cols_ventas, {}))
     print("ZCON13:", json.dumps(c_stock, ensure_ascii=False, default=str))
     print("ZDL25:", json.dumps(c_ventas, ensure_ascii=False, default=str))
     if c_stock["lineas"] < 100000:
